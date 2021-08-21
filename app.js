@@ -36,24 +36,51 @@ var options = {
    */
 /* 
 
-   sudo apt install graphicsmagick-imagemagick-compat  # version 1.4+really1.3.35-1, or
-   sudo apt install imagemagick-6.q16                  # version 8:6.9.10.23+dfsg-2.1ubuntu11.4
-   sudo apt install imagemagick-6.q16hdri              # version 8:6.9.10.23+dfsg-2.1ubuntu11.4
+    sudo apt install graphicsmagick-imagemagick-compat  # version 1.4+really1.3.35-1, or
+    sudo apt install imagemagick-6.q16                  # version 8:6.9.10.23+dfsg-2.1ubuntu11.4
+    sudo apt install imagemagick-6.q16hdri              # version 8:6.9.10.23+dfsg-2.1ubuntu11.4
     */
 
+    
 
   const { spawn } = require( 'child_process' );
+  const fs = require("fs")
+  var getDirArray = (url)=>{
+    return fs.readdirSync(url) 
+}
+const output = "serve/"
+const input = "tiffsSamle/"
+const dirArray = getDirArray("tiffsSamle/")
+dirArray.forEach(element => {
+  const ls = spawn( 'convert', [ '-compress', 'lzw',"-colorspace","Gray",input+element,output+element ] );
+  ls.stdout.on( 'data', ( data ) => {
+    console.log( `stdout: ${ data }` );
+  });
+
+  ls.stderr.on( 'data', ( data ) => {
+    console.log( `stderr: ${ data }` );
+  });
+
+  ls.on('close', ( code ) => {
+    console.log( `child process exited with code ${ code }` );
+  });
+
+});
+  
+/* 
   const ls = spawn( 'convert', [ '-compress', 'lzw',"file_example_TIFF_10MB.tiff","file_example_TIFF_10MB.tiff" ] );
   ls.stdout.on( 'data', ( data ) => {
     console.log( `stdout: ${ data }` );
-} );
+  });
 
-ls.stderr.on( 'data', ( data ) => {
+  ls.stderr.on( 'data', ( data ) => {
     console.log( `stderr: ${ data }` );
-} );
+  });
 
-ls.on( 'close', ( code ) => {
+  ls.on('close', ( code ) => {
     console.log( `child process exited with code ${ code }` );
-} );
+  });
+ */
+
 
 // convert -compress lzw ddd.tiff dest2.tiff
