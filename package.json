@@ -1,0 +1,23 @@
+{
+  "name": "tiff_compression",
+  "version": "1.0.0",
+  "description": "compressing tif files",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tif",
+    "tiff-compression"
+  ],
+  "author": "Asolieman",
+  "license": "ISC",
+  "dependencies": {
+    "glop": "^0.3.1",
+    "jimp": "^0.16.1",
+    "pngjs": "^6.0.0",
+    "sharp": "^0.29.0",
+    "tiff": "^5.0.0",
+    "tiff-to-png": "^2.0.2"
+  }
+}
