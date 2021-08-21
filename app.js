@@ -47,23 +47,29 @@ var options = {
   const fs = require("fs")
   var getDirArray = (url)=>{
     return fs.readdirSync(url) 
-}
+  }
+  var isFile = (path)=>{return path.includes(".")}
+  var compress = (inputPath, outputPath)=>{
+    const ls = spawn( 'convert', [ '-compress', 'lzw',"-colorspace","Gray",inputPath, outputPath ] );
+    ls.stdout.on( 'data', ( data ) => {
+      console.log( `stdout: ${ data }` );
+    });
+  
+    ls.stderr.on( 'data', ( data ) => {
+      console.log( `stderr: ${ data }` );
+    });
+  
+    ls.on('close', ( code ) => {
+      console.log( `child process exited with code ${ code } ${inputPath}` );
+    });
+  
+  }
 const output = "serve/"
 const input = "tiffsSamle/"
 const dirArray = getDirArray("tiffsSamle/")
 dirArray.forEach(element => {
-  const ls = spawn( 'convert', [ '-compress', 'lzw',"-colorspace","Gray",input+element,output+element ] );
-  ls.stdout.on( 'data', ( data ) => {
-    console.log( `stdout: ${ data }` );
-  });
-
-  ls.stderr.on( 'data', ( data ) => {
-    console.log( `stderr: ${ data }` );
-  });
-
-  ls.on('close', ( code ) => {
-    console.log( `child process exited with code ${ code }` );
-  });
+  if(isFile(element))
+    compress(input+element, output+element)
 
 });
   
@@ -83,4 +89,4 @@ dirArray.forEach(element => {
  */
 
 
-// convert -compress lzw ddd.tiff dest2.tiff
+// convert -compress lzw -colorspace Gray ddd.tiff dest2.tiff 
